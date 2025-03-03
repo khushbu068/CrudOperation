@@ -68,6 +68,7 @@ exports.createOps = async (req, res) => {
   };
 
   exports.updateOps=async(req,res)=>{
+
     try{
         const option={new:true};
         
@@ -85,3 +86,23 @@ exports.createOps = async (req, res) => {
         res.status(500).json({error:"internal server error"});
     }
   }
+
+  const User = require("../model/crudUser");
+
+  exports.deleteUser = async (req, res) => {
+    try {
+      const email = req.user.email;
+  
+      const deletedUser = await CrudUser.findOneAndDelete({ email });
+  
+      if (!deletedUser) {
+        return res.status(404).json({ error: "User not found" });
+      }
+  
+      res.status(200).json({ message: "User deleted successfully" });
+    } catch (err) {
+      console.error("Error deleting user:", err);
+      res.status(500).json({ error: "Error deleting user", details: err.message });
+    }
+  };
+  
